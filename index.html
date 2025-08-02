@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DABY METHOD by Teacher Daby @2025</title>
+    <!-- Google Fonts for a nice sans-serif like Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS for utility classes and responsive design (loaded via CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- html2pdf.js for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        /* Define CSS Variables for Burger King, McDonald's, TGIF, and Netflix Palettes */
+        :root {
+            /* Burger King Palette Colors */
+            --bk-red: #D40026;      /* Primary Red for accents/buttons */
+            --bk-gold: #F2A900;     /* Primary Golden Orange for headings/highlights */
+            --bk-blue: #003366;     /* Dark Blue for specific accents/buttons */
+            --bk-white: #FFFFFF;    /* White for button text/contrast */
+
+            /* McDonald's Palette Colors (subtly integrated) */
+            --mc-red: #BF0A30;      /* McDonald's Red */
+            --mc-yellow: #FFC72C;   /* McDonald's Yellow */
+
+            /* TGIF Palette Colors (subtly integrated) */
+            --tgif-red: #D2232A;    /* TGIF Red */
+            --tgif-blue: #0070C0;   /* TGIF Blue */
+
+            /* Netflix Mode Colors (keeping for dark theme base) */
+            --netflix-dark: #141414; /* Deep charcoal for background */
+            --netflix-medium: #222222; /* Slightly lighter dark for cards/navbar */
+            --netflix-light-text: #E5E5E5; /* Light grey for general text */
+
+            /* Feedback colors */
+            --feedback-correct: #4CAF50; /* Green for correct feedback */
+            --feedback-incorrect: #FF9800; /* Orange for incorrect feedback */
+        }
+
+        /* General Body Styling - Netflix Mode */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--netflix-dark); /* Dark background */
+            color: var(--netflix-light-text); /* Light text for contrast */
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden; /* Prevent horizontal scroll on smaller screens */
+        }
+
+        /* Header/Navbar Styling */
+        .navbar {
+            background-color: var(--netflix-medium); /* Darker grey for navbar */
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+            position: sticky; /* Keeps navbar at the top when scrolling */
+            top: 0;
+            z-index: 1000; /* Ensures navbar stays on top of other content */
+        }
+
+        /* Logo Styling */
+        .logo {
+            color: var(--bk-red); /* Burger King Red for the logo */
+            font-size: 2.2em;
+            font-weight: 700;
+            margin: 0; /* Remove default margin */
+            animation: pulse 2s infinite alternate; /* Attention-grabbing pulse effect */
+        }
+
+        /* Keyframes for the pulse animation */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.02);
+                opacity: 0.95;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* PDF Export Button Styling */
+        .pdf-button {
+            background-color: var(--bk-gold); /* Burger King Golden Orange button */
+            color: var(--netflix-dark); /* Dark text for contrast on gold */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px; /* Rounded corners for buttons */
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transition on hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add shadow for impact */
+        }
+
+        .pdf-button:hover {
+            background-color: var(--mc-yellow); /* Slightly brighter gold/yellow on hover (McDonald's touch) */
+            transform: translateY(-2px); /* Subtle lift effect */
+        }
+
+        /* Main Content Container - Simulates Netflix Content Grid/Flow */
+        .content-container {
+            display: flex;
+            flex-direction: column; /* Stacks sections vertically */
+            align-items: center; /* Centers content cards */
+            padding: 30px 5%;
+            gap: 40px; /* Space between content cards */
+            max-width: 1200px; /* Max width for content for better readability */
+            margin: 0 auto; /* Center the container itself */
+        }
+
+        /* Individual Content Card Styling */
+        .content-card {
+            background-color: var(--netflix-medium); /* Darker grey for card background */
+            border-radius: 12px; /* More rounded corners for cards */
+            padding: 40px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6); /* Deeper shadow for "pop" effect */
+            width: 100%;
+            max-width: 800px; /* Max width for individual cards */
+            box-sizing: border-box; /* Include padding in width */
+            transition: transform 0.4s ease, box-shadow 0.4s ease, opacity 0.6s ease;
+            /* Initial state for "impact to click in sequence" */
+            opacity: 0;
+            transform: translateY(30px) scale(0.98); /* Start slightly below and smaller */
+        }
+
+        /* Animation class for "impact to click in sequence" */
+        .content-card.fade-in {
+            opacity: 1;
+            transform: translateY(0) scale(1); /* Fade in and move to original position */
+        }
+
+        .content-card:hover {
+            transform: translateY(-8px) scale(1.01); /* More pronounced lift on hover */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8); /* Stronger shadow on hover */
+        }
+        
+        .content-card h4, .content-card h5 {
+            color: var(--bk-gold);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .content-card h5 {
+            font-size: 1.25em;
+        }
+        
+        .content-card ul {
+            list-style: disc;
+            padding-left: 20px;
+            margin-top: 1rem;
+        }
+        
+        .content-card li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Section Title Styling - Burger King Golden Orange */
+        .section-title {
+            color: var(--bk-gold); /* Burger King Golden Orange for headings */
+            font-size: 2.5em;
+            margin-bottom: 25px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Subtle text shadow */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px; /* Space between title and button */
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+
+        /* Content Text Styling */
+        .content-text {
+            font-size: 1.15em;
+            margin-top: 20px;
+            color: var(--netflix-light-text);
+            line-height: 1.8; /* Improved readability */
+        }
+
+        /* Language Buttons Container */
+        .lang-buttons {
+            text-align: center;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 15px; /* Space between buttons */
+        }
+
+        /* Individual Language Button Styling */
+        .lang-buttons button {
+            background-color: var(--bk-red); /* Burger King Red for language buttons */
+            color: var(--bk-white); /* White text for contrast */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .lang-buttons button:hover {
+            background-color: var(--tgif-red); /* Slightly brighter red on hover (TGIF touch) */
+            transform: translateY(-1px);
+        }
+
+        /* Active Language Button Styling */
+        .lang-buttons button.active {
+            background-color: var(--bk-gold); /* Burger King Golden Orange for active button */
+            color: var(--netflix-dark); /* Dark text for contrast */
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Highlight for expressions */
+        .highlight-expression {
+            background-color: var(--bk-gold); /* Golden Orange background */
+            color: var(--netflix-dark); /* Dark text */
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold; /* Make it bold for emphasis */
+            white-space: nowrap; /* Prevent breaking across lines for short phrases */
+        }
+        
+        /* Highlight for different meanings */
+        .highlight-red {
+            background-color: var(--bk-red);
+            color: var(--bk-white);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .highlight-blue {
+            background-color: var(--bk-blue);
+            color: var(--bk-white);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .highlight-gold {
+            background-color: var(--bk-gold);
+            color: var(--netflix-dark);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .highlight-green {
+            background-color: #B2FF59; /* A light, pleasant green */
+            color: var(--netflix-dark);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+
+        /* Animated and underlined highlight for 'join' */
+        .animated-highlight {
+            text-decoration: underline; /* Underline the text */
+            animation: pulse-highlight 1.5s infinite alternate; /* Apply the animation */
+        }
+
+        @keyframes pulse-highlight {
+            0% {
+                color: var(--netflix-light-text);
+                text-decoration-color: var(--bk-gold);
+            }
+            50% {
+                color: var(--bk-gold);
+                text-decoration-color: var(--netflix-light-text);
+            }
+            100% {
+                color: var(--netflix-light-text);
+                text-decoration-color: var(--bk-gold);
+            }
+        }
+        
+        /* New styling for the example box */
+        .example-box {
+            background-color: var(--netflix-dark); /* Slightly darker than card background */
+            border: 2px dashed var(--bk-gold); /* Golden Orange dashed border */
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        /* New animated box styling */
+        .animated-box {
+            animation: slideInRight 1s ease-out; /* Apply the animation */
+            animation-fill-mode: forwards; /* Keep the end state of the animation */
+            opacity: 0;
+        }
+
+        /* Keyframes for the slide-in animation */
+        @keyframes slideInRight {
+            0% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Exercise Specific Styles */
+        .exercise-container {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .exercise-container h3 {
+            color: var(--bk-gold); /* Burger King Golden Orange */
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .exercise-prompt, .matching-item, .translation-item {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: var(--netflix-light-text);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .translation-item {
+            justify-content: space-between;
+        }
+        
+        .translation-item span {
+            flex-basis: 50%;
+            text-align: right;
+            padding-right: 1rem;
+        }
+        
+        .translation-item input {
+            flex-basis: 40%;
+        }
+
+        .exercise-input, .matching-input, .translation-input {
+            background-color: #333;
+            color: var(--netflix-light-text);
+            border: 1px solid #555;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 1em;
+            width: 70%;
+            max-width: 300px;
+            box-sizing: border-box;
+        }
+        
+        .translation-input {
+            width: 100%;
+            max-width: none;
+        }
+
+        .exercise-button {
+            background-color: var(--bk-red); /* Burger King Red */
+            color: var(--bk-white);
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-left: 10px;
+        }
+
+        .exercise-button:hover {
+            background-color: var(--mc-red); /* Slightly brighter red on hover (McDonald's touch) */
+            transform: translateY(-1px);
+        }
+
+        .play-audio-button {
+            background-color: var(--bk-blue); /* Burger King Blue */
+            color: var(--bk-white);
+            padding: 8px 12px; /* Smaller padding for inline buttons */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8em; /* Smaller font size for inline buttons */
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-left: 5px; /* Small margin to separate from text */
+            white-space: nowrap; /* Prevent button text from wrapping */
+            display: inline-flex; /* Align icon and text */
+            align-items: center;
+            gap: 5px;
+        }
+
+        .play-audio-button:hover {
+            background-color: var(--tgif-blue); /* Slightly darker blue on hover (TGIF touch) */
+            transform: translateY(-1px);
+        }
+
+        .feedback-message {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+            min-height: 25px;
+        }
+
+        .feedback-message.correct {
+            color: var(--feedback-correct);
+        }
+
+        .feedback-message.incorrect {
+            color: var(--feedback-incorrect);
+        }
+
+        /* Loader styling for audio playback */
+        .audio-loader {
+            border: 4px solid var(--netflix-medium);
+            border-top: 4px solid var(--bk-gold);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Drag and Drop Exercise Styles */
+        .drag-and-drop-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .draggable-words {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+
+        .draggable-item {
+            background-color: var(--bk-red);
+            color: var(--bk-white);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: grab;
+            font-weight: bold;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            text-align: center; /* Center the text inside the draggable item */
+        }
+
+        .draggable-item:hover {
+            background-color: var(--mc-red);
+            transform: translateY(-2px);
+        }
+
+        .draggable-item:active {
+            cursor: grabbing;
+        }
+        
+        .drop-zone-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .drop-zone {
+            display: flex;
+            flex-direction: column; /* Stack the dropped item and text */
+            align-items: flex-start;
+            background-color: #333;
+            border: 2px dashed var(--netflix-light-text);
+            border-radius: 8px;
+            padding: 15px;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+        
+        .drop-zone .description {
+            font-size: 1em;
+            color: var(--netflix-light-text);
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        .drop-zone.drag-over {
+            border-color: var(--bk-gold);
+            background-color: rgba(242, 169, 0, 0.1);
+        }
+        
+        .drop-zone .dropped-item-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            min-height: 40px; /* Ensure a minimum height for the drop zone area */
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <h1 class="logo">DABY METHOD</h1>
+        <button id="pdf-export-button" class="pdf-button"><i class="fas fa-file-pdf"></i> Export to PDF</button>
+    </header>
+
+    <main class="content-container" id="content-container">
+
+        <h2 class="section-title">
+            <i class="fas fa-book-reader"></i> The DABY METHOD: A Guide to Effective Study
+        </h2>
+        
+        <!-- D Card -->
+        <div class="content-card">
+            <h4><span class="highlight-expression">D</span> Meeting <button class="play-audio-button" onclick="playAudio('Lesson 1: Meeting. I am in a meeting emphasizes that you are actively participating. I am at a meeting refers to your physical presence. In professional contexts, I am in a meeting is more commonly used.')"><i class="fas fa-volume-up"></i></button></h4>
+            <div class="example-box">
+                <h5>lesson 1: Meeting</h5>
+                <p>
+                    <span class="highlight-blue">"I am in a meeting"</span> emphasizes that you are actively participating or engaged in the meeting.
+                </p>
+                <p></p>
+                <p>
+                    It highlights your involvement in the discussion or activities happening inside the meeting.
+                </p>
+                <p></p>
+                <p>
+                    <span class="highlight-gold">"I am at a meeting"</span> refers more to your physical presence at the meeting's location but doesn't necessarily emphasize active participation.
+                </p>
+                <p></p>
+                <p>
+                    It simply states where you are.
+                </p>
+                <p></p>
+                <p>
+                    In professional contexts, especially when explaining your current status, <span class="highlight-blue">"I am in a meeting"</span> is more commonly used to indicate you are busy and engaged, while <span class="highlight-gold">"I am at a meeting"</span> can be a bit more neutral or refer just to being there.
+                </p>
+                <p></p>
+                <p>
+                    For example:
+                </p>
+                <p></p>
+                <p>
+                    "Sorry, I can't talk now; <span class="highlight-blue">I am in a meeting</span>." (you are engaged inside the meeting)
+                </p>
+                <p></p>
+                <p>
+                    "<span class="highlight-gold">I am currently at a meeting</span> downtown." (you are physically present at the location)
+                </p>
+            </div>
+            
+            <div class="example-box">
+                <h5>lesson 2: Stuck in a meeting</h5>
+                <p>
+                    <span class="highlight-red">"I'm stuck in a meeting"</span> implies a feeling of being <span class="highlight-red">trapped</span> or unable to leave, often due to the meeting being unproductive, lengthy, or mandatory. It carries a negative or frustrated tone.
+                </p>
+                <p></p>
+                <p>
+                    <span class="highlight-blue">"I'm in a long meeting"</span> is a neutral and factual statement. It simply describes the duration of the meeting without expressing a specific opinion or feeling of frustration.
+                </p>
+                <p></p>
+                <p>
+                    For example:
+                </p>
+                <p></p>
+                <p>
+                    "<span class="highlight-gold">Can you hold on a minute?</span> <span class="highlight-blue">I'm in a long meeting</span>, but <span class="highlight-gold">I'll see if I can step out quickly</span>." (A neutral statement)
+                </p>
+                <p></p>
+                <p>
+                    "I'll call you back as soon as I can; <span class="highlight-red">I'm stuck in a meeting</span> that has gone on for hours with no end in sight." (Expressing frustration)
+                </p>
+            </div>
+
+            <!-- New Animated Box for Lesson 3 -->
+            <div class="example-box animated-box">
+                <h5>lesson 3: I am on a (phone call) <button class="play-audio-button" onclick="playAudio('Lesson 3: I am on a phone call. We use the preposition on to refer to communication via a service or a device. For example, I am on the phone, I am on a call, or I am on the internet.')"><i class="fas fa-volume-up"></i></button></h5>
+                <p>
+                    We use the preposition <span class="highlight-gold">"on"</span> to refer to communication via a service or a device.
+                </p>
+                <p></p>
+                <p>
+                    This is a general rule that applies to various forms of electronic communication and media.
+                </p>
+                <p></p>
+                <p>
+                    For example:
+                </p>
+                <p></p>
+                <ul>
+                    <li><span class="highlight-blue">"I am on the phone."</span> (communicating via the phone network)</li>
+                    <li><span class="highlight-blue">"I am on a call."</span> (engaged in a conversation through a device)</li>
+                    <li><span class="highlight-blue">"She is on a video conference."</span> (using a service on a device)</li>
+                </ul>
+                <p></p>
+                <p>
+                    The same rule applies to other media, like being <span class="highlight-blue">"on the radio"</span> or <span class="highlight-blue">"on the internet."</span>
+                </p>
+            </div>
+
+            <!-- New Animated Box for Lesson 4 -->
+            <div class="example-box animated-box">
+                <h5>lesson 4: I have got a meeting <button class="play-audio-button" onclick="playAudio('Lesson 4: I have got a meeting. We use have got to express possession or necessity in a very natural way. It is a common and slightly more emphatic alternative to I have. It adds a sense of urgency to the current situation.')"><i class="fas fa-volume-up"></i></button></h5>
+                <p>
+                    The phrase <span class="highlight-gold">"I have got"</span> is a very natural and common way to express possession or necessity in English, similar to the Portuguese verbs <span class="highlight-gold">"ter," "tenho," and "temos."</span> It's a slightly more emphatic and often more casual alternative to just saying "I have." This is a useful structure for speakers of languages like Portuguese, where the verb "ter" can also express both possession and obligation. The use of "got" can add a sense of immediacy or urgency to the situation.
+                </p>
+                <p></p>
+                <p>
+                    Here are 15 examples to use at work:
+                </p>
+                <p></p>
+                <ul class="list-none space-y-4">
+                    <li><span class="highlight-blue">"I've got a report to finish."</span> <br> (This means you have a task that must be completed.)</li>
+                    <li><span class="highlight-blue">"We've got a deadline on Friday."</span> <br> (This indicates a looming due date that the team must meet.)</li>
+                    <li><span class="highlight-blue">"She's got a call with the client."</span> <br> (This refers to a scheduled meeting or phone call she must attend.)</li>
+                    <li><span class="highlight-blue">"He's got a new project."</span> <br> (This means he has been assigned a new work responsibility.)</li>
+                    <li><span class="highlight-blue">"I've got a few questions for you."</span> <br> (This is a polite way of saying you have some things you want to ask.)</li>
+                    <li><span class="highlight-blue">"You've got an email from the boss."</span> <br> (This is a notification that an important email is waiting for you.)</li>
+                    <li><span class="highlight-blue">"They've got a lot of work to do."</span> <br> (This phrase describes a large amount of tasks or responsibilities.)</li>
+                    <li><span class="highlight-blue">"I've got a headache."</span> <br> (This expresses a physical state or condition that is affecting you.)</li>
+                    <li><span class="highlight-blue">"We've got to review the presentation."</span> <br> (This shows that an action is required and necessary to proceed.)</li>
+                    <li><span class="highlight-blue">"She's got the key to the office."</span> <br> (This indicates she has physical possession or ownership of the item.)</li>
+                    <li><span class="highlight-blue">"I've got a flight to catch."</span> <br> (This means you have a scheduled trip and must leave soon.)</li>
+                    <li><span class="highlight-blue">"He's got a great idea."</span> <br> (This means he has a new and valuable concept to share.)</li>
+                    <li><span class="highlight-blue">"We've got a team meeting at 2 PM."</span> <br> (This is used to refer to a scheduled team event.)</li>
+                    <li><span class="highlight-blue">"I've got a suggestion for the new design."</span> <br> (This means you have an idea that you want to propose for the design.)</li>
+                    <li><span class="highlight-blue">"They've got the necessary skills."</span> <br> (This indicates that they have the required abilities for a task or role.)</li>
+                </ul>
+            </div>
+
+            <!-- New Animated Box for Lesson 6 -->
+            <div class="example-box animated-box">
+                <h5>lesson 6: I am sick / I have been sick <button class="play-audio-button" onclick="playAudio('Lesson 6: I am sick, and I have been sick. I am sick is a simple present statement that describes your current health condition. I have been sick describes a state that started in the past and continues up to now. In Portuguese, this is similar to the difference between Eu estou doente and Eu estive doente or Eu tenho estado doente.')"><i class="fas fa-volume-up"></i></button></h5>
+                <p>
+                    <span class="highlight-gold">"I am sick"</span> is a simple present statement. It describes your current health condition and means you are ill right now. This is a direct translation of the Portuguese phrase <span class="highlight-gold">"Eu estou doente."</span>
+                </p>
+                <p></p>
+                <p>
+                    <span class="highlight-blue">"I have been sick"</span> is a present perfect continuous tense. It describes a state that started in the past and continues up to now, or has just finished. It implies that you were ill for a period of time and may still be recovering. This is similar to the Portuguese phrases <span class="highlight-blue">"Eu estive doente"</span> or <span class="highlight-blue">"Eu tenho estado doente."</span>
+                </p>
+                <p></p>
+                <p>
+                    Here are 3 examples to use at work:
+                </p>
+                <p></p>
+                <ul class="list-none space-y-4">
+                    <li><span class="highlight-blue">"I am sick today, so I won't be able to come to the office."</span><br> (This is a direct statement about your health status for a specific day. You are currently ill.)</li>
+                    <li><span class="highlight-blue">"I've been sick for the past three days, but I hope to be back tomorrow."</span><br> (This explains that your illness started in the past and has lasted for a duration. You are providing context about your absence.)</li>
+                    <li><span class="highlight-blue">"I've been a little sick, so my productivity has been low this week."</span><br> (This phrase links a past health issue to a current work outcome, explaining why your performance might not be at its best.)</li>
+                </ul>
+            </div>
+
+            <!-- New Animated Box for Lesson 7 -->
+            <div class="example-box animated-box">
+                <h5>lesson 7: Explaining Absence Due to Sickness <button class="play-audio-button" onclick="playAudio('Lesson 7: Explaining Absence Due to Sickness. When someone asks you why you were not at work, the most natural way to answer is by using have been sick. Do not over-translate from Portuguese. Use have been as it naturally connects a past event to the present conversation.')"><i class="fas fa-volume-up"></i></button></h5>
+                <p>
+                    When a colleague or manager asks you questions like, "Why did you not come to work?", "Where were you?", or "Why were you absent from work?", the most natural and direct way to answer in English is with the phrase:
+                </p>
+                <p></p>
+                <p class="text-center text-2xl font-bold">
+                    <span class="highlight-green">"I have been sick."</span>
+                </p>
+                <p></p>
+                <p>
+                    Do not over-translate from Portuguese. In this context, the phrase <span class="highlight-gold">"have been sick"</span> is a natural way to explain a past event (your illness) in the context of a present conversation (explaining your absence). This phrase concisely connects the past to the present, making it the most fluent and common response.
+                </p>
+            </div>
+
+            <!-- New Animated Box for Lesson 8 -->
+            <div class="example-box animated-box">
+                <h5>lesson 8: I can make it vs I can't make it <button class="play-audio-button" onclick="playAudio('Lesson 8: I can make it versus I can't make it. This phrase is used to confirm or deny attendance at an event or a deadline. Using "make it" is a natural and common way to sound like a native speaker. Poor English would be to say I can go or I am not able to attend.')"><i class="fas fa-volume-up"></i></button></h5>
+                <p>
+                    The phrases <span class="highlight-gold">"I can make it"</span> and <span class="highlight-gold">"I can't make it"</span> are extremely common and natural ways to confirm or deny your ability to attend a scheduled event, an appointment, or a deadline. They are much more idiomatic than a direct, literal translation.
+                </p>
+                <p></p>
+                <p>
+                    A non-native speaker might mistakenly say something like <span class="highlight-red">"I can go"</span> or <span class="highlight-red">"I am not able to go,"</span> which, while grammatically correct, can sound stiff and unnatural in everyday conversation. The phrase "make it" naturally implies arriving at or attending something, connecting the action to the destination or event.
+                </p>
+                <p></p>
+                <p>
+                    Here are 20 examples to help you use these phrases correctly at work:
+                </p>
+                <p></p>
+                <ul class="list-none space-y-4">
+                    <li><span class="highlight-blue">"I can make it to the 9 AM meeting."</span> <br> (This means you will be able to attend the meeting at 9 AM.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: I can go to the meeting.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: I'll be there, I can attend.</span></li>
+
+                    <li><span class="highlight-blue">"I can't make it to the team lunch today, I have a conflicting appointment."</span> <br> (This is a polite way of saying you are unable to attend the team lunch.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: I am not able to go to the lunch.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: I won't be able to attend, I have to miss it.</span></li>
+                        
+                    <li><span class="highlight-blue">"I think I can make it for the last half of the conference call."</span> <br> (You are confirming you can join late.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: I think I can participate in the second part.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: I can join, I can be there.</span></li>
+
+                    <li><span class="highlight-blue">"She can't make it to the presentation because she's traveling."</span> <br> (She is unable to attend the presentation.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: She cannot go to the presentation.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: She won't be able to attend, She's unavailable.</span></li>
+
+                    <li><span class="highlight-blue">"Can you make it to the project review tomorrow?"</span> <br> (A quick and natural way to ask if someone is available to attend.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: Can you go to the project review?</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: Will you be able to attend?, Are you available?</span></li>
+
+                    <li><span class="highlight-blue">"We can't make it to the deadline; we need an extension."</span> <br> (This phrase can also be used for deadlines, meaning you won't be able to complete the work in time.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: We are not able to finish by the deadline.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: We can't meet the deadline, We won't finish in time.</span></li>
+
+                    <li><span class="highlight-blue">"Let's try to make it to the next bus so we aren't late."</span> <br> (Here, "make it" means to arrive in time to catch the bus.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: Let's try to get to the next bus.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: Let's try to catch the next bus.</span></li>
+                    
+                    <li><span class="highlight-blue">"I'll have to leave early, so I probably can't make it to the celebratory dinner."</span> <br> (You are explaining that you will have to miss the event.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: I probably cannot go to the dinner.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: I will have to miss the dinner, I won't be able to attend.</span></li>
+
+                    <li><span class="highlight-blue">"I can make it to the client meeting, but I'll be about five minutes late."</span> <br> (You are confirming attendance with a small delay.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: I can go to the meeting, but I will be late.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: I will be there, I can attend.</span></li>
+
+                    <li><span class="highlight-blue">"Don't worry, the team can make it to the project launch on time."</span> <br> (Assuring someone that the team will be ready for the launch.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: The team is able to be ready for the project launch.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: The team will be ready, The team will be on time.</span></li>
+
+                    <li><span class="highlight-blue">"Can you make it to the gym after work?"</span> <br> (Asking if a person is available to go to the gym.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: Can you go to the gym after work?</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: Are you available?, Do you have time?</span></li>
+                        
+                    <li><span class="highlight-blue">"Sorry, I can't make it. I have a prior engagement."</span> <br> (A very polite and common way to decline an invitation.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: Sorry, I am not able to come.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: Sorry, I'm unavailable; I have to miss it.</span></li>
+
+                    <li><span class="highlight-blue">"The package needs to make it to the client by Friday."</span> <br> (Here, it refers to the package arriving by a specific time.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: The package must arrive by Friday.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: The package must be delivered, It has to arrive.</span></li>
+                    
+                    <li><span class="highlight-blue">"I can't make it to the weekly status update this afternoon."</span> <br> (Stating your inability to attend a regular meeting.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: I am not able to go to the weekly status update.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: I have to miss it, I'm unavailable.</span></li>
+
+                    <li><span class="highlight-blue">"We can make it happen if we all work together."</span> <br> (This is a slightly different but related usage, meaning you can achieve a goal.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: We can do it if we all work together.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: We can achieve it, We can get it done.</span></li>
+
+                    <li><span class="highlight-blue">"Just call me if you can make it."</span> <br> (Asking for confirmation of attendance without being pushy.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: Just call me if you are able to go.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: Just call me if you can attend.</span></li>
+                    
+                    <li><span class="highlight-blue">"I'll try my best, but I don't know if I can make it."</span> <br> (Expressing uncertainty about your ability to attend.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: I don't know if I can go.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: I don't know if I'll be able to get there.</span></li>
+                    
+                    <li><span class="highlight-blue">"He's been sick, but he said he can make it to the team-building event."</span> <br> (Providing an update on someone's plan to attend despite a challenge.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: He said he can go to the event.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: He said he'll be there.</span></li>
+                    
+                    <li><span class="highlight-blue">"The coffee machine can't make it through the day without breaking down."</span> <br> (An informal, metaphorical use, meaning the machine won't survive the day.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: The coffee machine is not able to last all day.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: The coffee machine won't last, The machine will fail.</span></li>
+                    
+                    <li><span class="highlight-blue">"We can't make it with this budget, we need more funds."</span> <br> (Another metaphorical use, meaning the team cannot succeed with the current resources.) <br>
+                        <span class="text-sm italic text-gray-400">Poor English: We are not able to do it with this budget.</span> <br>
+                        <span class="text-sm italic text-gray-400">Synonyms: We can't succeed, We can't manage with this budget.</span></li>
+                </ul>
+            </div>
+            
+            <!-- New Animated Box for Lesson 9 -->
+            <div class="example-box animated-box">
+                <h5>lesson 9: Question and Answer Scenarios <button class="play-audio-button" onclick="playAudio('Lesson 9: Question and Answer Scenarios. Here are a few different scenarios that demonstrate a clear question and a corresponding answer, showing how a sequence of communication works.')"><i class="fas fa-volume-up"></i></button></h5>
+                <p>
+                    Here are a few different scenarios that demonstrate a clear question and a corresponding answer, showing how a sequence of communication works.
+                </p>
+
+                <h5 class="mt-4 font-bold">Scenario 1: A Friend is Running Late for a Coffee Meetup</h5>
+                <p>
+                    <strong>Situation:</strong> You and a friend are supposed to meet for coffee. You're already at the cafe, and they texted to say they're running behind. You need an updated timeline.
+                </p>
+                <p>
+                    <strong>Question:</strong> <span class="highlight-gold">"Hey! Just wanted to check in—about how long until you get here?"</span>
+                </p>
+                <p>
+                    <strong>Answer:</strong> <span class="highlight-blue">"Sorry again! I'm leaving now, so I should be there in about 15 minutes."</span>
+                </p>
+                <p>
+                    <strong>Why this works:</strong> The question is direct and asks for a specific piece of information. The answer provides that information clearly and concisely, resolving the uncertainty from the question.
+                </p>
+                
+                <h5 class="mt-4 font-bold">Scenario 2: A Coworker Needs Help with a Project</h5>
+                <p>
+                    <strong>Situation:</strong> You are an expert in a certain software program. A coworker is struggling to get a report finished and asks for your help.
+                </p>
+                <p>
+                    <strong>Question:</strong> <span class="highlight-gold">"I'm having trouble with the monthly report. Can you walk me through the steps for formatting it correctly?"</span>
+                </p>
+                <p>
+                    <strong>Answer:</strong> <span class="highlight-blue">"Of course. I can show you how to set up a template so you won't have to do it from scratch next time."</span>
+                </p>
+                <p>
+                    <strong>Why this works:</strong> The question identifies a problem and requests a specific type of assistance. The answer confirms that help is available and even offers a bonus solution (creating a template), which shows a deeper understanding of the coworker's need.
+                </p>
+
+                <h5 class="mt-4 font-bold">Scenario 3: Planning a Weekend Activity</h5>
+                <p>
+                    <strong>Situation:</strong> Your partner is planning a relaxing weekend activity, but hasn't finalized the details yet. They ask for your input.
+                </p>
+                <p>
+                    <strong>Question:</strong> <span class="highlight-gold">"For the weekend, do you want to just relax at home, or should we go for a hike at that new trail?"</span>
+                </p>
+                <p>
+                    <strong>Answer:</strong> <span class="highlight-blue">"Let's go for the hike. I've been cooped up all week and could use the fresh air."</span>
+                </p>
+                <p>
+                    <strong>Why this works:</strong> The question offers a clear choice between two options. The answer selects one option and provides a simple reason, which helps the questioner understand the motivation behind the choice.
+                </p>
+
+                <h5 class="mt-4 font-bold">Scenario 4: A Teacher Responding to a Student's Request</h5>
+                <p>
+                    <strong>Situation:</strong> A student is working on a difficult math problem and believes they need more time to complete it. They ask the teacher for an extension on the deadline.
+                </p>
+                <p>
+                    <strong>Question:</strong> <span class="highlight-gold">"Is it possible to have an extension on the homework assignment? I'm having a hard time with the last few problems?"</span>
+                </p>
+                <p>
+                    <strong>Answer:</strong> <span class="highlight-blue">"Yes, you can have until the end of the day tomorrow. Make sure you get to the last section, though, as that's a key part of the lesson."</span>
+                </p>
+                <p>
+                    <strong>Why this works:</strong> The question is a polite request. The answer directly addresses the request with a "yes" and provides a new deadline. It also gives additional guidance, which is helpful to the student.
+                </p>
+
+                <h5 class="mt-4 font-bold">Scenario 5: Shopping for Groceries</h5>
+                <p>
+                    <strong>Situation:</strong> You are at the grocery store and realize you've forgotten part of the list. You call your roommate to ask a question.
+                </p>
+                <p>
+                    <strong>Question:</strong> <span class="highlight-gold">"I'm at the store. Do we need any more milk?"</span>
+                </p>
+                <p>
+                    <strong>Answer:</strong> <span class="highlight-blue">"We're all out! Can you grab a gallon of 2%?"</span>
+                </p>
+                <p>
+                    <strong>Why this works:</strong> The question is a simple, factual inquiry. The answer provides the necessary information ("we're all out") and follows up with a clear instruction, showing the full scope of the communication exchange.
+                </p>
+            </div>
+        </div>
+
+        <!-- A Card -->
+        <div class="content-card">
+            <h4><span class="highlight-expression">A</span>nalyze your Understanding <button class="play-audio-button" onclick="playAudio('Analyze your understanding. Complete the following sentences to test your knowledge of all the previous lessons!')"><i class="fas fa-volume-up"></i></button></h4>
+            <p class="content-text">
+                Complete the sentences below to test your understanding of all the lessons we've covered. Use the correct words or phrases to fill in the blanks!
+            </p>
+
+            <div class="example-box">
+                <h5>Fill-in-the-Blanks Quiz</h5>
+                <div id="fill-in-quiz-container" class="space-y-4">
+                    <div class="flex items-center justify-start gap-2">
+                        <span>1. When you are actively participating in a meeting, you are ___ a meeting.</span>
+                        <input type="text" id="q1" class="matching-input" data-correct-answer="in" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>2. Saying "I am ___ a meeting" implies you are physically present but not necessarily participating.</span>
+                        <input type="text" id="q2" class="matching-input" data-correct-answer="at" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>3. When you feel trapped in a long meeting, you would say, "I'm ___ a meeting."</span>
+                        <input type="text" id="q3" class="matching-input" data-correct-answer="stuck" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>4. To describe a neutral, factual long meeting, you say, "I'm ___ a long meeting."</span>
+                        <input type="text" id="q4" class="matching-input" data-correct-answer="in" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>5. We use the preposition "___" to refer to communication via a device like a phone.</span>
+                        <input type="text" id="q5" class="matching-input" data-correct-answer="on" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>6. The phrase "I have ___" is a natural way to express possession or necessity.</span>
+                        <input type="text" id="q6" class="matching-input" data-correct-answer="got" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>7. "I ___ sick" describes your current health condition right now.</span>
+                        <input type="text" id="q7" class="matching-input" data-correct-answer="am" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>8. "I have ___ sick" explains an illness that started in the past and continues to the present.</span>
+                        <input type="text" id="q8" class="matching-input" data-correct-answer="been" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>9. The most natural way to explain a recent absence due to illness is, "I have ___ sick."</span>
+                        <input type="text" id="q9" class="matching-input" data-correct-answer="been" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>10. A non-native speaker might mistakenly say "I can go" instead of "I can ___ it."</span>
+                        <input type="text" id="q10" class="matching-input" data-correct-answer="make" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>11. To confirm you will attend a meeting, you can say, "I can ___ it."</span>
+                        <input type="text" id="q11" class="matching-input" data-correct-answer="make" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>12. To decline an invitation, a polite way to say you are unable to attend is "I can't ___ it."</span>
+                        <input type="text" id="q12" class="matching-input" data-correct-answer="make" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>13. In a Q&A scenario, the questioner should ask for a ___ piece of information.</span>
+                        <input type="text" id="q13" class="matching-input" data-correct-answer="specific" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>14. In a Q&A scenario, the answer should be clear and ___ to the question asked.</span>
+                        <input type="text" id="q14" class="matching-input" data-correct-answer="concise" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>15. To ask a person if they are available to meet, you can say, "Can you ___ it?"</span>
+                        <input type="text" id="q15" class="matching-input" data-correct-answer="make" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>16. The phrase "I've ___ a report to finish" implies an urgent task.</span>
+                        <input type="text" id="q16" class="matching-input" data-correct-answer="got" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>17. If a meeting is not productive and you want to leave, you might feel ___ in the meeting.</span>
+                        <input type="text" id="q17" class="matching-input" data-correct-answer="stuck" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>18. If you were ill last week and are still recovering, you would say, "I have ___ sick."</span>
+                        <input type="text" id="q18" class="matching-input" data-correct-answer="been" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>19. A neutral, factual way to talk about a long meeting is, "I'm ___ a long meeting."</span>
+                        <input type="text" id="q19" class="matching-input" data-correct-answer="in" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>20. The phrase "I've ___ to review the presentation" expresses a necessary action.</span>
+                        <input type="text" id="q20" class="matching-input" data-correct-answer="got" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>21. When you need to explain why you were absent from work, you would use "I have ___ sick."</span>
+                        <input type="text" id="q21" class="matching-input" data-correct-answer="been" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>22. To politely decline an invitation, you can say, "Sorry, I can't ___ it."</span>
+                        <input type="text" id="q22" class="matching-input" data-correct-answer="make" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>23. A more casual way to say "I have a new project" is "I've ___ a new project."</span>
+                        <input type="text" id="q23" class="matching-input" data-correct-answer="got" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>24. If you are physically at the meeting's location but not a main participant, you are ___ a meeting.</span>
+                        <input type="text" id="q24" class="matching-input" data-correct-answer="at" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>25. A fluent way to ask "Will you be able to attend?" is "Can you ___ it?"</span>
+                        <input type="text" id="q25" class="matching-input" data-correct-answer="make" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>26. To confirm that you can attend an event, you say, "I can ___ it."</span>
+                        <input type="text" id="q26" class="matching-input" data-correct-answer="make" placeholder="Type here...">
+                    </div>
+                    <div class="flex items-center justify-start gap-2">
+                        <span>27. When communicating via the internet, you are "___ the internet."</span>
+                        <input type="text" id="q27" class="matching-input" data-correct-answer="on" placeholder="Type here...">
+                    </div>
+                </div>
+                <button class="exercise-button mt-4" onclick="checkFillInTheBlanksAnswers()">Check Answers</button>
+                <div id="feedback-fill-in" class="feedback-message"></div>
+            </div>
+        </div>
+
+        <!-- B Card -->
+        <div class="content-card">
+            <h4><span class="highlight-expression">B</span>uild your Knowledge <button class="play-audio-button" onclick="playAudio('Build your Knowledge. This is where you actively engage with the material. Now, let us practice translating from Portuguese into English. Try your best to get the phrases as close to the natural English responses as possible. This will help you commit the phrases to memory for future use.')"><i class="fas fa-volume-up"></i></button></h4>
+            <p class="content-text">
+                This is where you actively engage with the material. Now, let's practice translating from Portuguese into English. Try your best to get the phrases as close to the natural English responses as possible. This will help you commit the phrases to memory for future use.
+            </p>
+
+            <div class="example-box">
+                <h5>Translation Exercise</h5>
+                <div id="translation-container" class="space-y-4">
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-start gap-2">
+                        <span class="text-base text-gray-400 italic flex-grow-0">1. Estou em uma reunião.</span>
+                        <input type="text" id="trans-1" class="translation-input" data-correct-answer="I am in a meeting" placeholder="Translate into English">
+                    </div>
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-start gap-2">
+                        <span class="text-base text-gray-400 italic flex-grow-0">2. Eu não consigo ir hoje.</span>
+                        <input type="text" id="trans-2" class="translation-input" data-correct-answer="I can't make it today" placeholder="Translate into English">
+                    </div>
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-start gap-2">
+                        <span class="text-base text-gray-400 italic flex-grow-0">3. Eu tenho estado doente.</span>
+                        <input type="text" id="trans-3" class="translation-input" data-correct-answer="I have been sick" placeholder="Translate into English">
+                    </div>
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-start gap-2">
+                        <span class="text-base text-gray-400 italic flex-grow-0">4. Você pode ir à reunião?</span>
+                        <input type="text" id="trans-4" class="translation-input" data-correct-answer="Can you make it to the meeting" placeholder="Translate into English">
+                    </div>
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-start gap-2">
+                        <span class="text-base text-gray-400 italic flex-grow-0">5. Ela está no telefone.</span>
+                        <input type="text" id="trans-5" class="translation-input" data-correct-answer="She is on the phone" placeholder="Translate into English">
+                    </div>
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-start gap-2">
+                        <span class="text-base text-gray-400 italic flex-grow-0">6. Eu tenho um projeto a terminar.</span>
+                        <input type="text" id="trans-6" class="translation-input" data-correct-answer="I have got a project to finish" placeholder="Translate into English">
+                    </div>
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-start gap-2">
+                        <span class="text-base text-gray-400 italic flex-grow-0">7. Estamos presos em uma longa reunião.</span>
+                        <input type="text" id="trans-7" class="translation-input" data-correct-answer="We are stuck in a long meeting" placeholder="Translate into English">
+                    </div>
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-start gap-2">
+                        <span class="text-base text-gray-400 italic flex-grow-0">8. Eu não consigo chegar a tempo.</span>
+                        <input type="text" id="trans-8" class="translation-input" data-correct-answer="I can't make it on time" placeholder="Translate into English">
+                    </div>
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-start gap-2">
+                        <span class="text-base text-gray-400 italic flex-grow-0">9. Tenho umas perguntas para você.</span>
+                        <input type="text" id="trans-9" class="translation-input" data-correct-answer="I have got a few questions for you" placeholder="Translate into English">
+                    </div>
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-start gap-2">
+                        <span class="text-base text-gray-400 italic flex-grow-0">10. Ela tem a chave.</span>
+                        <input type="text" id="trans-10" class="translation-input" data-correct-answer="She has got the key" placeholder="Translate into English">
+                    </div>
+                </div>
+                <button class="exercise-button mt-4" onclick="checkTranslationAnswers()">Check Translations</button>
+                <div id="feedback-translation" class="feedback-message"></div>
+            </div>
+        </div>
+
+        <!-- Y Card -->
+        <div class="content-card">
+            <h4><span class="highlight-expression">Y</span>ield the Results <button class="play-audio-button" onclick="playAudio('Yield the Results. Now, it is time to test your knowledge. Take practice quizzes, explain the topic without looking at your notes, or apply the concepts to a real-world scenario. This final step is crucial to ensure you have truly mastered the material.')"><i class="fas fa-volume-up"></i></button></h4>
+            <p class="content-text">
+                Now, it is time to test your knowledge. Take practice quizzes, explain the topic without looking at your notes, or apply the concepts to a real-world scenario. This final step is crucial to ensure you have truly **mastered the material**.
+            </p>
+            <div class="example-box">
+                <h5>Example:</h5>
+                <p>
+                    To **yield** the results, you would take a practice quiz on "Cellular Respiration" and review any incorrect answers to identify areas for further study.
+                </p>
+            </div>
+            
+            <div class="exercise-container">
+                <h3>Drag-and-Drop Exercise</h3>
+                <p class="exercise-prompt">Drag the phrases to their correct descriptions:</p>
+                
+                <div class="draggable-words" id="draggable-words">
+                    <div class="draggable-item" id="drag-1" draggable="true">I am in a meeting</div>
+                    <div class="draggable-item" id="drag-2" draggable="true">I have been sick</div>
+                    <div class="draggable-item" id="drag-3" draggable="true">I can't make it</div>
+                    <div class="draggable-item" id="drag-4" draggable="true">I have got a meeting</div>
+                    <div class="draggable-item" id="drag-5" draggable="true">I am sick</div>
+                    <div class="draggable-item" id="drag-6" draggable="true">I'm stuck in a meeting</div>
+                    <div class="draggable-item" id="drag-7" draggable="true">I am on a call</div>
+                    <div class="draggable-item" id="drag-8" draggable="true">I can make it</div>
+                    <div class="draggable-item" id="drag-9" draggable="true">I am at a meeting</div>
+                </div>
+
+                <div class="drop-zone-container" id="drop-zone-container">
+                    <div class="drop-zone" data-correct-answer="I am in a meeting">
+                        <div class="dropped-item-container"></div>
+                        <span class="description">This indicates you are actively participating in a meeting.</span>
+                    </div>
+                    <div class="drop-zone" data-correct-answer="I have been sick">
+                        <div class="dropped-item-container"></div>
+                        <span class="description">This explains an illness that started in the past and continues to the present.</span>
+                    </div>
+                    <div class="drop-zone" data-correct-answer="I can't make it">
+                        <div class="dropped-item-container"></div>
+                        <span class="description">This is a natural way to decline an invitation or state your inability to attend.</span>
+                    </div>
+                    <div class="drop-zone" data-correct-answer="I have got a meeting">
+                        <div class="dropped-item-container"></div>
+                        <span class="description">This phrase expresses possession or necessity, often with a sense of urgency.</span>
+                    </div>
+                    <div class="drop-zone" data-correct-answer="I am sick">
+                        <div class="dropped-item-container"></div>
+                        <span class="description">This is a simple statement that describes your current health condition.</span>
+                    </div>
+                    <div class="drop-zone" data-correct-answer="I'm stuck in a meeting">
+                        <div class="dropped-item-container"></div>
+                        <span class="description">This conveys a negative feeling of being trapped or unable to leave a meeting.</span>
+                    </div>
+                    <div class="drop-zone" data-correct-answer="I am on a call">
+                        <div class="dropped-item-container"></div>
+                        <span class="description">This refers to communicating via a device or service.</span>
+                    </div>
+                    <div class="drop-zone" data-correct-answer="I can make it">
+                        <div class="dropped-item-container"></div>
+                        <span class="description">This is a natural way to confirm your attendance at an event.</span>
+                    </div>
+                    <div class="drop-zone" data-correct-answer="I am at a meeting">
+                        <div class="dropped-item-container"></div>
+                        <span class="description">This indicates your physical presence at a meeting's location, without emphasizing active participation.</span>
+                    </div>
+                </div>
+
+                <button class="exercise-button mt-4" onclick="checkDragAndDropAnswers()">Check Matches</button>
+                <div id="feedback-drag-and-drop" class="feedback-message"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // JavaScript for handling interactions, animations, and API calls
+
+        // Add a "fade-in" class to content cards on page load
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const cards = document.querySelectorAll('.content-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('fade-in');
+                }, index * 200); // Stagger the fade-in effect
+            });
+
+            // Initialize drag and drop functionality
+            initDragAndDrop();
+        });
+
+        // Function to export the main content as a PDF
+        document.getElementById('pdf-export-button').addEventListener('click', () => {
+            const element = document.getElementById('content-container');
+            const options = {
+                filename: 'DABY_METHOD_Summary.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(options).save();
+        });
+
+        // =================================================================
+        // TTS (Text-to-Speech) Functionality
+        // =================================================================
+
+        // Helper function to convert base64 to ArrayBuffer
+        function base64ToArrayBuffer(base64) {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        // Helper function to create a WAV file from PCM data
+        function pcmToWav(pcm16, sampleRate) {
+            const dataLength = pcm16.length * 2;
+            const buffer = new ArrayBuffer(44 + dataLength);
+            const view = new DataView(buffer);
+
+            let offset = 0;
+            const writeString = (str) => {
+                for (let i = 0; i < str.length; i++) {
+                    view.setUint8(offset + i, str.charCodeAt(i));
+                }
+                offset += str.length;
+            };
+
+            // RIFF chunk descriptor
+            writeString('RIFF');
+            view.setUint32(offset, 36 + dataLength, true); offset += 4;
+            writeString('WAVE'); offset += 4;
+
+            // fmt sub-chunk
+            writeString('fmt ');
+            view.setUint32(offset, 16, true); offset += 4; // Sub-chunk size
+            view.setUint16(offset, 1, true); offset += 2; // Audio format (PCM)
+            view.setUint16(offset, 1, true); offset += 2; // Number of channels
+            view.setUint32(offset, sampleRate, true); offset += 4; // Sample rate
+            view.setUint32(offset, sampleRate * 2, true); offset += 4; // Byte rate
+            view.setUint16(offset, 2, true); offset += 2; // Block align
+            view.setUint16(offset, 16, true); offset += 2; // Bits per sample
+
+            // data sub-chunk
+            writeString('data');
+            view.setUint32(offset, dataLength, true); offset += 4;
+
+            // Write PCM data
+            for (let i = 0; i < pcm16.length; i++) {
+                view.setInt16(offset, pcm16[i], true);
+                offset += 2;
+            }
+
+            return new Blob([view], { type: 'audio/wav' });
+        }
+
+        // Function to play audio using the Gemini TTS API
+        async function playAudio(text) {
+            // Find the button and add a loader
+            const button = event.target.closest('button');
+            const originalContent = button.innerHTML;
+            button.innerHTML = '<div class="audio-loader"></div>';
+            button.disabled = true;
+
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{
+                    parts: [{ text: text }]
+                }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                        voiceConfig: {
+                            prebuiltVoiceConfig: { voiceName: "Kore" }
+                        }
+                    }
+                },
+                model: "gemini-2.5-flash-preview-tts"
+            };
+
+            const maxRetries = 3;
+            let retryCount = 0;
+            let response;
+            
+            while (retryCount < maxRetries) {
+                try {
+                    response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        const part = result?.candidates?.[0]?.content?.parts?.[0];
+                        const audioData = part?.inlineData?.data;
+                        const mimeType = part?.inlineData?.mimeType;
+
+                        if (audioData && mimeType && mimeType.startsWith("audio/")) {
+                            // Extract sample rate from mimeType string, e.g., "audio/L16;rate=24000"
+                            const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+                            const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
+                            
+                            const pcmData = base64ToArrayBuffer(audioData);
+                            const pcm16 = new Int16Array(pcmData);
+                            const wavBlob = pcmToWav(pcm16, sampleRate);
+                            
+                            const audioUrl = URL.createObjectURL(wavBlob);
+                            const audio = new Audio(audioUrl);
+                            audio.play();
+
+                            audio.onended = () => {
+                                // Clean up after playback
+                                URL.revokeObjectURL(audioUrl);
+                                button.innerHTML = originalContent;
+                                button.disabled = false;
+                            };
+                            return; // Success, exit the retry loop
+                        } else {
+                            console.error('Invalid audio data received from API');
+                        }
+                    } else {
+                        console.error('API call failed with status:', response.status);
+                    }
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                }
+
+                retryCount++;
+                if (retryCount < maxRetries) {
+                    const delay = Math.pow(2, retryCount) * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+            
+            // If all retries fail
+            button.innerHTML = originalContent;
+            button.disabled = false;
+            console.error('Failed to play audio after multiple retries.');
+        }
+
+        // =================================================================
+        // Interactive Exercise Functions
+        // =================================================================
+
+        // Function to check the fill-in-the-blank answers
+        function checkFillInTheBlanksAnswers() {
+            const quizContainer = document.getElementById('fill-in-quiz-container');
+            const inputs = quizContainer.querySelectorAll('input');
+            const feedback = document.getElementById('feedback-fill-in');
+            let correctCount = 0;
+
+            inputs.forEach(input => {
+                const userAnswer = input.value.trim().toLowerCase();
+                const correctAnswer = input.dataset.correctAnswer.toLowerCase();
+                if (userAnswer === correctAnswer) {
+                    input.style.borderColor = 'var(--feedback-correct)';
+                    correctCount++;
+                } else {
+                    input.style.borderColor = 'var(--feedback-incorrect)';
+                }
+            });
+
+            if (correctCount === inputs.length) {
+                feedback.textContent = 'Fantastic! You got all the answers correct!';
+                feedback.className = 'feedback-message correct';
+            } else {
+                feedback.textContent = `You got ${correctCount} out of ${inputs.length} correct. Review the lessons and try again!`;
+                feedback.className = 'feedback-message incorrect';
+            }
+        }
+        
+        // Function to check the translation answers
+        function checkTranslationAnswers() {
+            const translationContainer = document.getElementById('translation-container');
+            const inputs = translationContainer.querySelectorAll('input');
+            const feedback = document.getElementById('feedback-translation');
+            let correctCount = 0;
+
+            inputs.forEach(input => {
+                const userAnswer = input.value.trim().toLowerCase();
+                const correctAnswer = input.dataset.correctAnswer.toLowerCase();
+                if (userAnswer === correctAnswer) {
+                    input.style.borderColor = 'var(--feedback-correct)';
+                    correctCount++;
+                } else {
+                    input.style.borderColor = 'var(--feedback-incorrect)';
+                }
+            });
+
+            if (correctCount === inputs.length) {
+                feedback.textContent = 'Awesome! You translated all the phrases correctly!';
+                feedback.className = 'feedback-message correct';
+            } else {
+                feedback.textContent = `You got ${correctCount} out of ${inputs.length} translations correct. Try to match the exact phrasing from the lessons.`;
+                feedback.className = 'feedback-message incorrect';
+            }
+        }
+
+        // =================================================================
+        // Drag and Drop Logic
+        // =================================================================
+        
+        let draggedItem = null;
+
+        function initDragAndDrop() {
+            const draggables = document.querySelectorAll('.draggable-item');
+            const dropZones = document.querySelectorAll('.drop-zone');
+
+            // Add event listeners for draggable items
+            draggables.forEach(item => {
+                item.addEventListener('dragstart', (e) => {
+                    draggedItem = item;
+                    e.dataTransfer.setData('text/plain', item.textContent.trim());
+                    // Add a slight delay to allow the ghost image to be created
+                    setTimeout(() => {
+                        item.style.opacity = '0.5';
+                    }, 0);
+                });
+
+                item.addEventListener('dragend', () => {
+                    if (draggedItem) {
+                        draggedItem.style.opacity = '1';
+                        draggedItem = null;
+                    }
+                });
+            });
+
+            // Add event listeners for drop zones
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', (e) => {
+                    e.preventDefault(); // Allow dropping
+                    const container = zone.querySelector('.dropped-item-container');
+                    if (container && container.children.length === 0) { // Only allow dropping if the zone is empty
+                        zone.classList.add('drag-over');
+                    }
+                });
+                
+                zone.addEventListener('dragenter', (e) => {
+                    e.preventDefault();
+                });
+
+                zone.addEventListener('dragleave', () => {
+                    zone.classList.remove('drag-over');
+                });
+                
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.classList.remove('drag-over');
+                    const droppedItemText = e.dataTransfer.getData('text/plain');
+                    
+                    const container = zone.querySelector('.dropped-item-container');
+                    
+                    // Check if the drop zone is empty before appending a new item
+                    if (container && container.children.length === 0) {
+                        // Find the original draggable item
+                        const originalItem = Array.from(draggables).find(item => item.textContent.trim() === droppedItemText);
+                        
+                        if (originalItem) {
+                             // Create a clone of the original item
+                            const droppedItemClone = originalItem.cloneNode(true);
+                            droppedItemClone.classList.add('cursor-pointer');
+                            droppedItemClone.removeAttribute('draggable'); // Make cloned item not draggable
+                            
+                            // Hide the original item
+                            originalItem.style.display = 'none'; 
+                            
+                            // Append the clone to the container within the drop zone
+                            container.appendChild(droppedItemClone);
+                            
+                            // Add a click event to the clone to return it to the source
+                            droppedItemClone.addEventListener('click', () => {
+                                originalItem.style.display = 'block'; // Show the original item
+                                container.removeChild(droppedItemClone); // Remove the cloned item from the drop zone
+                            });
+                        }
+                    }
+                });
+            });
+        }
+        
+        // Function to check the drag-and-drop answers
+        function checkDragAndDropAnswers() {
+            const dropZones = document.querySelectorAll('.drop-zone');
+            const feedback = document.getElementById('feedback-drag-and-drop');
+            let correctCount = 0;
+
+            dropZones.forEach(zone => {
+                const droppedItemContainer = zone.querySelector('.dropped-item-container');
+                const droppedItem = droppedItemContainer ? droppedItemContainer.querySelector('.draggable-item') : null;
+
+                const correctAnswer = zone.dataset.correctAnswer;
+                
+                if (droppedItem && droppedItem.textContent.trim() === correctAnswer) {
+                    zone.style.borderColor = 'var(--feedback-correct)';
+                    zone.style.backgroundColor = 'rgba(76, 175, 80, 0.1)';
+                    correctCount++;
+                } else {
+                    zone.style.borderColor = 'var(--feedback-incorrect)';
+                    zone.style.backgroundColor = 'rgba(255, 152, 0, 0.1)';
+                }
+            });
+            
+            if (correctCount === dropZones.length) {
+                feedback.textContent = 'Excellent! You have successfully matched all the words!';
+                feedback.className = 'feedback-message correct';
+            } else {
+                feedback.textContent = `You got ${correctCount} out of ${dropZones.length} correct. Review the lesson and try again!`;
+                feedback.className = 'feedback-message incorrect';
+            }
+        }
+    </script>
+</body>
+</html>
